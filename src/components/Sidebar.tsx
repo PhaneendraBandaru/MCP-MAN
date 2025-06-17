@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Settings, Database } from "lucide-react";
+import { Home, Settings, Search } from "lucide-react";
 
 export function Sidebar() {
   return (
@@ -34,8 +34,9 @@ export function Sidebar() {
           <Settings size={18} />
           Config
         </NavLink>
+
         <NavLink
-          to="/servers"
+          to="/all-servers"
           className={({ isActive }) =>
             `flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${
               isActive
@@ -44,8 +45,8 @@ export function Sidebar() {
             }`
           }
         >
-          <Database size={18} />
-          Servers
+          <Search size={18} />
+          All Servers
         </NavLink>
       </nav>
     </div>

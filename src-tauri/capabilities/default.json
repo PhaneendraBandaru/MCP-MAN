@@ -121,6 +121,48 @@
               "validator": ".+"
             }
           ]
+        },
+        {
+          "name": "ps-commands",
+          "cmd": "ps",
+          "args": [
+            {
+              "validator": "^(aux|-p)$"
+            },
+            {
+              "validator": ".+"
+            }
+          ]
+        },
+        {
+          "name": "kill-commands",
+          "cmd": "kill",
+          "args": [
+            {
+              "validator": "^(-9|[0-9]+)$"
+            }
+          ]
+        },
+        {
+          "name": "killall-commands",
+          "cmd": "killall",
+          "args": [
+            {
+              "validator": "^Claude$"
+            }
+          ]
+        },
+        {
+          "name": "open-commands",
+          "cmd": "open",
+          "args": [
+            {
+              "validator": "^(-a)$"
+            },
+            {
+              "validator": "^Claude$"
+            }
+          ]
         }
       ]
     }

@@ -2,6 +2,7 @@ mod claude_config;
 mod env_check;
 mod mcp_runner;
 mod mcp_servers;
+mod process_detection;
 mod store;
 mod tray;
 
@@ -12,10 +13,14 @@ use claude_config::{
 use env_check::{
     check_claude_installed, get_node_path, get_python_path, get_uv_path, install_environment,
 };
-use mcp_runner::{get_server_status, restart_claude_app, start_server, stop_server};
+use mcp_runner::{get_server_status, restart_claude_app, restart_vscode_app, start_server, stop_server};
 use mcp_servers::{
     get_mcp_server_templates, install_mcp_server, is_mcp_server_installed, select_folder,
     uninstall_mcp_server, update_mcp_server_config,
+};
+use process_detection::{
+    detect_running_mcp_servers, detect_copilot_mcp_servers, get_all_mcp_servers, 
+    kill_mcp_server, get_process_info,
 };
 use std::time::Duration;
 use tauri::Runtime;
@@ -79,6 +84,12 @@ pub fn run() {
             install_environment,
             update_global_shortcut_command,
             restart_claude_app,
+            restart_vscode_app,
+            detect_running_mcp_servers,
+            detect_copilot_mcp_servers,
+            get_all_mcp_servers,
+            kill_mcp_server,
+            get_process_info,
             store::save_installed_server,
             store::get_installed_server,
             store::remove_installed_server,

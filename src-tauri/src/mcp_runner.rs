@@ -246,3 +246,40 @@ pub fn restart_claude_app() -> Result<(), String> {
 
     Ok(())
 }
+
+#[tauri::command]
+pub fn restart_vscode_app() -> Result<(), String> {
+    // 先终止 VS Code 进程
+    let kill_status = Command::new("killall")
+        .arg("Visual Studio Code")
+        .status()
+        .map_err(|e| format!("Failed to kill VS Code: {}", e))?;
+
+    if !kill_status.success() {
+        // 尝试使用更常见的进程名
+        let kill_status2 = Command::new("killall")
+            .arg("Code")
+            .status()
+            .map_err(|e| format!("Failed to kill Code process: {}", e))?;
+        
+        if !kill_status2.success() {
+            return Err("Failed to kill VS Code process (tried both 'Visual Studio Code' and 'Code')".to_string());
+        }
+    }
+
+    // 短暂延迟确保进程完全终止
+    thread::sleep(std::time::Duration::from_millis(1000));
+
+    // 重新启动 VS Code
+    let open_status = Command::new("open")
+        .arg("-a")
+        .arg("Visual Studio Code")
+        .status()
+        .map_err(|e| format!("Failed to start VS Code: {}", e))?;
+
+    if !open_status.success() {
+        return Err("Failed to start VS Code".to_string());
+    }
+
+    Ok(())
+}

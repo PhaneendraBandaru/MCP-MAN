@@ -66,4 +66,19 @@ export interface InstalledMcpServer {
   env: Record<string, string> | null;
   require_file_path: boolean;
   repo_url: string;
-} 
+}
+
+export interface RunningMcpServer {
+  name: string;
+  pid: number;
+  command: string;
+  args: string[];
+  source: string; // "claude", "copilot", "system", "unknown"
+  config_path?: string;
+}
+
+export interface SystemMcpServers {
+  running_servers: RunningMcpServer[];
+  copilot_servers: RunningMcpServer[];
+  claude_servers: RunningMcpServer[];
+}

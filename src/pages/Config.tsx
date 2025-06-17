@@ -106,7 +106,7 @@ export function ConfigPage({
           <div className="grid gap-6 sm:grid-cols-2">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle>Claude Control</CardTitle>
+                <CardTitle>MCP Services Control</CardTitle>
               </CardHeader>
               <CardContent>
                 <Button
@@ -114,17 +114,17 @@ export function ConfigPage({
                   className="w-full flex items-center justify-center gap-2 h-9 px-3 bg-black text-white hover:bg-black/90 hover:text-white"
                   onClick={async () => {
                     try {
-                      await invoke("restart_claude_app");
+                      await invoke("restart_vscode_app");
                     } catch (error) {
-                      console.error("Failed to restart Claude:", error);
+                      console.error("Failed to restart VS Code:", error);
                     }
                   }}
                 >
                   <RefreshCw className="h-4 w-4" />
-                  <span>Restart</span>
+                  <span>Restart VS Code</span>
                 </Button>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Restart the Claude App to apply MCP service updates
+                  Restart VS Code to apply GitHub Copilot MCP service updates
                 </p>
               </CardContent>
             </Card>
@@ -147,6 +147,33 @@ export function ConfigPage({
               </CardContent>
             </Card>
           </div>
+
+          {/* GitHub Copilot MCP Information */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>GitHub Copilot MCP Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  Your GitHub Copilot MCP servers are configured in VS Code settings:
+                </p>
+                <code className="text-xs bg-gray-100 px-2 py-1 rounded mt-1 block">
+                  ~/Library/Application Support/Code/User/settings.json
+                </code>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">
+                  To manage GitHub Copilot MCP servers, use the "All Servers" tab which shows 
+                  all running MCP processes and configured servers from both Claude Desktop and VS Code.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <div className="w-3 h-3 bg-green-600 rounded"></div>
+                <span className="text-muted-foreground">GitHub Copilot MCP servers detected</span>
+              </div>
+            </CardContent>
+          </Card>
 
           {claudeConfig && (
             <div>

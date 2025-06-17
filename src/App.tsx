@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 import { StatusPage } from "./pages/Status";
 import { ConfigPage } from "./pages/Config";
-import { ServersPage } from "./pages/Servers";
+import { AllServersPage } from "./pages/AllServers";
 import { Button } from "./components/ui/button";
 import { Card, CardContent } from "./components/ui/card";
 import { RotateCw } from "lucide-react";
@@ -14,7 +14,6 @@ import { useServerControl } from "./hooks/useServerControl";
 import {
   ClaudeConfig,
   ServerStatus,
-  EnvInputs,
   McpServerArgs,
   McpServerTemplate,
 } from "./types";
@@ -28,7 +27,6 @@ function App() {
   const [claudeConfig, setClaudeConfig] = useState<ClaudeConfig | null>(null);
   const [configPath, setConfigPath] = useState<string>("");
   const [claudeInstalled, setClaudeInstalled] = useState<string>("");
-  const [envInputs, setEnvInputs] = useState<EnvInputs>({});
   const [serverStatus, setServerStatus] = useState<ServerStatus>({});
   const [selectedPath, setSelectedPath] = useState<Record<string, string>>({});
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -72,25 +70,17 @@ function App() {
   } = useEnvironmentCheck();
   const { checkClaudeConfig, getConfigPath, selectDirectory } = useClaudeConfig(
     (templateName: string, selectedPath: string) => {
-      setSelectedPath(prev => ({...prev, [templateName]: selectedPath}));
+      setSelectedPath((prev: Record<string, string>) => ({...prev, [templateName]: selectedPath}));
     }
   );
-  const { installServer, uninstallServer, controlServer } = useServerControl(
+  const { uninstallServer, controlServer } = useServerControl(
     () => checkClaudeConfig().then(setClaudeConfig),
     checkMcpServers,
     getAvailableServers,
-    envInputs
+    {}
   );
 
-  const handleEnvInput = useCallback(
-    (serverName: string, key: string, value: string) => {
-      setEnvInputs((prev: EnvInputs) => ({
-        ...prev,
-        [`${serverName}_${key}`]: value,
-      }));
-    },
-    []
-  );
+
 
   const initializeApp = useCallback(async () => {
     console.log("Starting initialization...");
@@ -164,20 +154,6 @@ function App() {
     [handleInstall, checkClaudeInstalled]
   );
 
-  const handleInstallServer = async (template: McpServerTemplate) => {
-    try {
-      console.log('Installing server:', template);
-      await installServer(template);
-      const newConfig = await checkClaudeConfig();
-      console.log('New config after install:', newConfig);
-      setClaudeConfig(newConfig);
-      await updateServerStatus();
-    } catch (error) {
-      console.error('Failed to install server:', error);
-      throw error;
-    }
-  };
-
   useEffect(() => {
     initializeApp();
   }, [initializeApp]);
@@ -230,17 +206,10 @@ function App() {
                     />
                   }
                 />
+
                 <Route
-                  path="/servers"
-                  element={
-                    <ServersPage
-                      selectedPath={selectedPath}
-                      envInputs={envInputs}
-                      onSelectDirectory={selectDirectory}
-                      onEnvInput={handleEnvInput}
-                      onInstallServer={handleInstallServer}
-                    />
-                  }
+                  path="/all-servers"
+                  element={<AllServersPage />}
                 />
               </Routes>
             </CardContent>
